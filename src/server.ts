@@ -5,6 +5,8 @@ const app = express();
 
 const prisma = new PrismaClient();
 
+app.listen(3333);
+
 // Métodos GET
 
 app.get('/games', async (req, res) => {
@@ -43,6 +45,19 @@ app.get('/games/:id/ads', async (req, res) => {
   });
 
   return res.json(ads);
-})
+});
 
-app.listen(3333);
+app.get('/ads/:id/discord', async (req, res) => {
+  const adId = req.params.id;
+
+  const discord = await prisma.ads.findUniqueOrThrow({
+    select: {
+      discord: true,
+    },
+    where: {
+      id: adId,
+    }
+  });
+
+  return res.json(discord);
+})
